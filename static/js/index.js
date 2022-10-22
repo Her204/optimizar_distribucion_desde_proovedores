@@ -22,7 +22,7 @@ function injectdata(endpoint, targetId, staticText, tag, classNames) {
 }
 
 axios.get("/categorias/").then(r => {
-  r.data.forEach(categoria => {
+  r.data.categorias.forEach(categoria => {
     const a = document.createElement("a")
     a.innerHTML = categoria.nombre_categoria
     a.href = `/explorando_por_categoria/${categoria.categoria_id}`
@@ -93,7 +93,7 @@ if (goal_href) {
   }
 } else {
   axios.get("/productos/").then(r => {
-    r.data.forEach(obtener_productos);
+    r.data.productos.forEach(obtener_productos);
   })
 
   injectdata("/productos/", "cantidadProductos", " Items", "p", "text-gray-500 dark:text-gray-300")
