@@ -1,5 +1,5 @@
 axios.get("/categorias").then(r=>{
-    r.data.forEach(function(cat) {
+    r.data.categorias.forEach(function(cat) {
         let select = document.getElementById("post_categorias");
         let option =  document.createElement("option");
         option.setAttribute("value", cat.nombre_categoria);
