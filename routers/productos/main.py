@@ -1,8 +1,8 @@
 from typing import List
-from sqlalchemy.orm import Session
-from schemas import productos as productos_schemas
 from dependencies import get_db
+from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends
+from schemas import productos as productos_schemas
 from services.productos import main as productos_services
 
 router = APIRouter(prefix="/productos", tags=["productos"])
@@ -21,6 +21,13 @@ def obtener_productos_por_categoria(categoria_id:int,db: Session = Depends(get_d
     productos_seleccionados = productos_services.seleccionar_productos_por_categorias(categoria_id=categoria_id,
                                                                                     db=db)
     return productos_seleccionados
+
+@router.get("/productos_por_vendedor/{usuario_id}",tags=["productos"],response_model=List[productos_schemas.Producto])
+def obtener_productos_por_vendedor(usuario_id:int,db: Session = Depends(get_db)):
+    productos_seleccionados = productos_services.seleccionar_productos_por_vendedor(usuario_id=usuario_id,
+                                                                                    db=db)
+    return productos_seleccionados
+
 
 #creamos un endpoint que se conecte a la  funcion que busca productos por nombre en el services
 @router.get("/buscar", tags=["productos"], response_model=List[productos_schemas.Producto])

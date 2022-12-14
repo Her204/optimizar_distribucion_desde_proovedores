@@ -21,7 +21,6 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="usuario/token")
 
-
 def verificar_contrasenia(contrasenia_base, contrasenia_encriptada):
     return hashlib.sha256(bytes(contrasenia_base, 'utf-8')).hexdigest() == contrasenia_encriptada
 
@@ -49,6 +48,7 @@ def autentificar_usuario(db:Session,nombre_de_usuario: str, contrasenia: str):
         return False
     if not verificar_contrasenia(contrasenia, usuario.contrasenia_encriptada):
         return False
+    print(usuario)
     return usuario
 
 
@@ -67,6 +67,7 @@ def crear_usuario(db: Session,  user: schemas_usuarios.UsuarioCreate):
     db_user = Usuario(nombre_de_usuario=user.nombre_de_usuario,
             correo_de_usuario=user.correo_de_usuario,
             pais = user.pais,
+            fecha_de_creacion = datetime.now(),
             ciudad = user.ciudad,
             contrasenia_encriptada=hashed_password) 
     db.add(db_user) 
@@ -75,7 +76,8 @@ def crear_usuario(db: Session,  user: schemas_usuarios.UsuarioCreate):
     return db_user
 
 
-async def obtener_usuario_actual(db : Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+async def obtener_usuario_actual(db : Session = Depends(get_db),
+                                 token: str = Depends(oauth2_scheme)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -84,7 +86,7 @@ async def obtener_usuario_actual(db : Session = Depends(get_db), token: str = De
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
-        print(username)
+        #print(username)
         if username is None:
             raise credentials_exception
         token_data = schemas_usuarios.TokenData(username=username)

@@ -14,6 +14,14 @@ class UsuarioBase(BaseModel):
     pais: str
     ciudad: str
 
+class MostrarUsuario(BaseModel):
+    nombre_de_usuario: str
+    correo_de_usuario: EmailStr
+    esta_activo: bool
+    es_super_usuario: bool
+    class Config:
+        orm_mode = True
+
 class UsuarioCreate(UsuarioBase):
     contrasenia_encriptada: str
 

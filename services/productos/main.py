@@ -1,10 +1,11 @@
 #from sql_app import models
+import datetime
+from sqlalchemy.orm import Session
 from models import producto as producto_models
 from models import categoria as categoria_models
-from services.categorias import main as  services_categorias
 from schemas import productos as productos_schemas
-from sqlalchemy.orm import Session
-import datetime
+from services.usuarios import main as  services_usuarios
+from services.categorias import main as  services_categorias
 
 #funcion que retorna todos los productos
 def obtener_productos(db: Session):
@@ -12,6 +13,17 @@ def obtener_productos(db: Session):
 
 def seleccionar_productos_por_categorias(categoria_id: int,db: Session):
     productos_ids = db.query(producto_models.CategoriaProducto).filter_by(categoria_id=categoria_id).all()
+
+    print(productos_ids)
+
+    seleccionado = [db.query(producto_models.Producto).filter(
+                            producto_models.Producto.producto_id == producto_0.producto_id).first() 
+                                for producto_0 in productos_ids ]
+
+    return seleccionado
+
+def seleccionar_productos_por_vendedor(usuario_id: int,db: Session):
+    productos_ids = db.query(producto_models.VendedorProducto).filter_by(usuario_id=usuario_id).all()
 
     print(productos_ids)
 
@@ -53,6 +65,20 @@ def crear_producto(db: Session,producto:productos_schemas.ProductoCreate):
         db.add(db_producto_categoria)
         db.commit()
         db.refresh(db_producto_categoria)
+
+    for user in producto.usuarios:
+        usuario = services_usuarios.obtener_usuario_por_nombre(db=db,nombre_de_usuario=user)
+        try: 
+            usuario_id = usuario.usuario_id        
+        except Exception as error:
+            raise error
+        print(usuario_id)
+    
+        db_producto_vendedor = producto_models.VendedorProducto(usuario_id=usuario_id,
+                                                                producto_id=db_producto.producto_id)
+        db.add(db_producto_vendedor)
+        db.commit()
+        db.refresh(db_producto_vendedor)
 
     return db_producto
 

@@ -28,6 +28,7 @@ class ActualizarProducto(BaseModel):
 
 class ProductoCreate(ProductoBase): 
     categorias: List[str]#Optional[str] = None
+    usuarios: List[str]
 
 class Producto(ProductoBase):
     producto_id: int

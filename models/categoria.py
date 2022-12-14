@@ -9,7 +9,6 @@ class Categoria(Base):
     categoria_id = Column(Integer, primary_key=True, index=True)
     nombre_categoria = Column(String, unique=True)
     descripcion = Column(String)
-    #esta_activo = Column(Boolean)
     productos = relationship(
         "CategoriaProducto",
         #secondary="categorias_de_productos",

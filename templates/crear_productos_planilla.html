@@ -3,34 +3,52 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>eCommerce FastAPI</title>
+  <title>AltoQ</title>
 
+  <script src="https://bundle.run/buffer@6.0.3"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="/static/css/styles.css" rel="stylesheet">
-  
+  <link
+      href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css"
+      rel="stylesheet"
+    />
 
   <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
 </head>
 
 <body class="">
-  <div class="container max-w-full bg-red-300">
-    <div class="relative py-16 bg-gradient-to-br from-sky-50 to-red-300">  
+  {% include 'navegacion.html' %}
+  <div class="container max-w-full bg-white-400">
+    <div class="relative py-16 bg-gradient-to-br from-sky-50 to-white-400">  
         <div class="relative container m-auto px-6 text-gray-500 md:px-12 xl:px-40">
-            <div class="m-auto md:w-8/12 lg:w-6/12 xl:w-6/12">
-                <div class="rounded-xl bg-white shadow-xl">
-                    <div class="p-6 sm:p-16">
+            <div class="m-auto md:w-8/12 lg:w-6/12 xl:w-6/12">   
+              <div class="rounded-xl bg-white shadow-xl">
+                    <div class="space-y-4 p-6 sm:p-12">
+                      <img src="https://tailus.io/sources/blocks/social/preview/images/icon.svg" loading="lazy" class="w-10" alt="tailus logo">
+                      <h2 class="mb-8 text-2xl text-center text-cyan-900 font-bold">Crear Producto</h2>
+                    </div>
+                    <div class="p-6 sm:p-2">
                       {% for variable in entradas %}
                           {%set tipo = variable[1]%}
                           {%set variable = variable[0]%}
                           {%set variable_id = "post_"+variable%}
                           <div class="mt-16 grid space-y-4">
                           <p class="mb-8 text-2xl text-center"> {{variable}}:</p>
-                          {%if variable == "categorias"%}
-                            <select type={{tipo}} id={{variable_id}} class="mb-8 text-2xl text-center" name={{variable}}>
-                            </select> 
+                          {%if variable == "link_de_imagen"%}
+                          <input name="file"
+                                   type="file"
+                                   class="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-2x1 focus:outline-none" 
+                                   enctype="multipart/form-data"
+                                   id="{{variable_id}}"
+                                   name="{{variable}}"
+                                   type="{{tipo}}">
+                          
+                          {%elif variable == "categorias" or variable == "usuarios"%}
+                          <select type={{tipo}} id={{variable_id}} class="mb-8 text-2xl text-center" name={{variable}}>
+                          </select>
                           {%else%}
-                            <input class="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-2x1 focus:outline-none"
+                          <input class="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-2x1 focus:outline-none"
                                 type={{tipo}} id={{variable_id}} name={{variable}} placeholder="Buscar">
                           {%endif%}
                           </div>
@@ -46,6 +64,21 @@
         </div>
     </div>
   </div>
+  <footer
+	class="flex items-center justify-between flex-wrap bg-blue-400 p-6 mt-5"
+> 
+	<div class="text-sm lg:flex-grow text-center text-white text-lg">
+		Este proyecto es un fork del proyecto ecommerce_fastapi del grupo python en español continuado por Herbert Vente
+		<p class="text-sm"> Federico Mazzei - Herbert Vente - Javier Espinoza - Leo Guanco</p>
+	</div>
+</footer>
+
 </body>
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+<script>
+  //new TomSelect('#post_categorias', {
+    //maxItems: 10,
+  //});
+</script>
 <script src="/static/js/crear_producto.js"></script>
 </html>
