@@ -1,10 +1,10 @@
-import os
 from PIL import Image
 import matplotlib.pyplot as plt
 from sqlalchemy.orm import Session
+from fastapi_csrf_protect import CsrfProtect
 from fastapi.templating import Jinja2Templates
 from schemas import productos as productos_schemas
-from fastapi import Request, APIRouter, File,Form,UploadFile
+from fastapi import Request, APIRouter, File,UploadFile,Depends
 
 router = APIRouter(prefix="", tags=["home"])
 
@@ -36,17 +36,18 @@ async def index(palabra_clave:str,request: Request):
 
 # Genera la planilla de crear producto
 @router.get('/crear_producto')
-async def index(request:Request):
-  entradas = eval(productos_schemas.ProductoCreate.schema_json())["properties"].keys()
+async def index(request:Request,csrf_protect:CsrfProtect = Depends()):
+    csrf_protect.validate_csrf_in_cookies(request)
+    entradas = eval(productos_schemas.ProductoCreate.schema_json())["properties"].keys()
 
-  tipos = ["text","number","number","file",
-          "number","text","text","text"]
+    tipos = ["text","number","number","file",
+             "number","text","text","text"]
 
-  context = {
-    "request":request,
-    "entradas": [a for a in zip(entradas,tipos)]
-  }
-  return templates.TemplateResponse("crear_productos_planilla.html", context)
+    context = {
+      "request":request,
+       "entradas": [a for a in zip(entradas,tipos)]
+    }
+    return templates.TemplateResponse("crear_productos_planilla.html", context)
 
 @router.post("/guardar_imagen_productos")
 async def UploadImage(file: UploadFile = File(...)):

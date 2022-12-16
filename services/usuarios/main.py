@@ -78,9 +78,10 @@ def crear_usuario(db: Session,  user: schemas_usuarios.UsuarioCreate):
 
 async def obtener_usuario_actual(db : Session = Depends(get_db),
                                  token: str = Depends(oauth2_scheme)):
+    print(token)
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
+        detail="No se puede validar credenciales",
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
@@ -90,6 +91,7 @@ async def obtener_usuario_actual(db : Session = Depends(get_db),
         if username is None:
             raise credentials_exception
         token_data = schemas_usuarios.TokenData(username=username)
+        print(token_data)
     except JWTError as error:
         print(error)
         print("jwt error")
@@ -101,6 +103,7 @@ async def obtener_usuario_actual(db : Session = Depends(get_db),
 
 
 async def obtener_usuario_activo_actual(current_user: schemas_usuarios.Usuario = Depends(obtener_usuario_actual)):
+    print(current_user)
     if not current_user.esta_activo:
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user

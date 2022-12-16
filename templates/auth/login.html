@@ -15,10 +15,8 @@
   <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico'">
 </head>
 <body>
-  {% include "navegacion.html"%}
   <div class="container max-w-full">
-    <!--{% include 'navegacion.html' %}-->
-    <!-- component -->
+    {% include "navegacion.html"%}
     <div class="relative py-16 bg-gradient-to-br from-sky-50 to-gray-200">  
         <div class="relative container m-auto px-6 text-gray-500 md:px-12 xl:px-40">
             <div class="m-auto md:w-8/12 lg:w-6/12 xl:w-6/12">
@@ -80,7 +78,7 @@
                                 <label>Contrasenia</label>
                                 <input type="password" required placeholder="Choose a secure password" value="{{password}}" name="password" class="form-control">
                               </div>
-                              <button type="submit" class="btn btn-primary group h-12 px-6 border-2 border-gray-300 rounded-full transition duration-300 
+                              <button type="submit" id="boton" class="btn btn-primary group h-12 px-6 border-2 border-gray-300 rounded-full transition duration-300 
                               hover:border-blue-400 focus:bg-blue-50 active:bg-blue-100">Ingresar</button>
                             </form>
                           </div>
@@ -91,6 +89,16 @@
               </div>  
           </div>
       </div>
+      <script>
+        if ("{{msg}}" === "Inicio de sesion satisfactoria :)"){
+          axios.get("/login/csrftoken");
+          console.log("done");
+        }
+        const button = document.querySelector('#menu-button');
+        button.addEventListener('click', () => {
+             menu.classList.toggle('hidden');
+        });
+      </script>
       <footer
         class="flex items-center justify-between flex-wrap bg-blue-600 p-6 mt-5"
       > 

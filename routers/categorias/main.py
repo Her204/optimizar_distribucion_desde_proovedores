@@ -1,8 +1,9 @@
 from typing import List
-from sqlalchemy.orm import Session
-from schemas import categorias as categorias_schemas
 from dependencies import get_db
+from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends
+from fastapi_csrf_protect import CsrfProtect
+from schemas import categorias as categorias_schemas
 from services.categorias import main as categorias_services
 
 router = APIRouter(prefix="/categorias", tags=["categorias"])

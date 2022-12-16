@@ -2,6 +2,7 @@ from typing import List
 from dependencies import get_db
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends
+from fastapi_csrf_protect import CsrfProtect
 from schemas import productos as productos_schemas
 from services.productos import main as productos_services
 
@@ -23,7 +24,7 @@ def obtener_productos_por_categoria(categoria_id:int,db: Session = Depends(get_d
     return productos_seleccionados
 
 @router.get("/productos_por_vendedor/{usuario_id}",tags=["productos"],response_model=List[productos_schemas.Producto])
-def obtener_productos_por_vendedor(usuario_id:int,db: Session = Depends(get_db)):
+def obtener_productos_por_vendedor(usuario_id:int,db: Session = Depends(get_db),):
     productos_seleccionados = productos_services.seleccionar_productos_por_vendedor(usuario_id=usuario_id,
                                                                                     db=db)
     return productos_seleccionados
@@ -41,11 +42,14 @@ async def crear_producto(producto: productos_schemas.ProductoCreate,db: Session 
     return productos_services.crear_producto(db=db,producto=producto)
 
 @router.put("/actualizar/{producto_id}", tags=["productos"], response_model=productos_schemas.Producto) 
-def actualizar_producto(producto_id: int,producto_actualizado:productos_schemas.ActualizarProducto, db: Session = Depends(get_db)):
+def actualizar_producto(producto_id: int,producto_actualizado:productos_schemas.ActualizarProducto, db: Session = Depends(get_db),
+                        csrf_protect:CsrfProtect = Depends()):
+    csrf_protect.validate_csrf_in_cookies(request)
     return productos_services.actualizar_producto(db=db, producto_id=producto_id,producto_actualizado=producto_actualizado)
 
 
 #creamos un endpoint que se conecte a la funcion que elimina un producto en el services
 @router.delete("/eliminar/{producto_id}", tags=["productos"], response_model=productos_schemas.Producto) 
-def eliminar_producto(producto_id: int, db: Session = Depends(get_db)):
+def eliminar_producto(producto_id: int, db: Session = Depends(get_db),csrf_protect:CsrfProtect = Depends()):
+    csrf_protect.validate_csrf_in_cookies(request)
     return productos_services.eliminar_producto(db=db, producto_id=producto_id)

@@ -1,5 +1,9 @@
 from pydantic import BaseModel, EmailStr
 from typing import Union
+import os
+
+class CsrfSettings(BaseModel):
+  secret_key:str = os.environ.get("TOKEN_ALTOQ")
 
 class Token(BaseModel):
     access_token: str
