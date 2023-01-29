@@ -9,6 +9,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi_csrf_protect import CsrfProtect
 from schemas import usuarios as usuarios_schemas
 from routers.ventas import main as ventas_router
+from fastapi.middleware.cors import CORSMiddleware
 from routers.usuarios import login as login_router
 from routers.usuarios import main as usuarios_router
 from fastapi import FastAPI, Request, Depends,status
@@ -29,6 +30,10 @@ app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="static/"), name="static")
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*']
+)
 
 @CsrfProtect.load_config
 def get_csrf_config():

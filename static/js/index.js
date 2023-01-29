@@ -41,13 +41,15 @@ let split_href_buscar = href.split("?")
 let goal_href_buscar = split_href_buscar[split_href_buscar.length - 1]
 
 let obtener_productos = producto => {
+  document.baseURI = "127.0.0.1:8000/"
   const div = document.createElement("div")
   div.className = "flex flex-col items-center justify-center w-full max-w-lg mx-auto"
   document.getElementById("listaProductos").appendChild(div)
   const img = document.createElement("img")
   //axis.post
   console.log(producto.link_de_imagen)
-  img.src = producto.link_de_imagen
+  img.src = location.origin+"/" +producto.link_de_imagen
+  console.log(document.origin)
   //img.src = "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=634&q=80"
   img.alt = producto.nombre_producto
   img.className = "object-cover w-full rounded-md h-72 xl:h-80"

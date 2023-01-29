@@ -1,4 +1,3 @@
-
 document.getElementById("boton_crear_categoria").onclick = async function () {
     let nombre_producto = await document.getElementById("post_nombre_producto").value;
     let numero_de_productos_subidos = await document.getElementById("post_numero_de_productos_subidos").value;

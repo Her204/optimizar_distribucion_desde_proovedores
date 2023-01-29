@@ -33,7 +33,7 @@ services:
       - db_postgres_fastapi
 
   nginx:
-    image: nginx:1.13
+    image: nginx:latest
     ports:
       - 8000:80
     volumes:

@@ -4,3 +4,4 @@ ecommerce_fastapi.db
 sql_app/database.py
 #virtualenv entorno de desarrollo
 env
+.space

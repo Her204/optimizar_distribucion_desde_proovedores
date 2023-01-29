@@ -48,6 +48,9 @@ def login_para_acceder_token(response: Response,
     response.set_cookie(
         key="access_token", value=f"Bearer {access_token}", httponly=True
     )
+    response.set_cookie(
+        key="nombre_de_usuario",value=user.nombre_de_usuario,httponly=True
+    )
     return response#{"access_token": access_token, "token_type": "bearer"}
 
 
@@ -74,6 +77,7 @@ async def login(request: Request, db: Session = Depends(get_db),
             response = templates.TemplateResponse("auth/login.html", form.__dict__)
             
             response = login_para_acceder_token(response=response,form_data=form, db=db)
+            print(response.headers)
             return response
         except HTTPException:
             form.__dict__.update(msg="")

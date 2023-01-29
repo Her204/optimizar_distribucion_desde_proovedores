@@ -41,7 +41,7 @@ async def crear_cuenta(request: Request, db: Session = Depends(get_db)):
             )
         except IntegrityError:
             form.__dict__.get("errors").append("Nombre de usuario o correo duplicado")
-            return templates.TemplateResponse("users/signin.html", form.__dict__)
+            return templates.TemplateResponse("auth/signin.html", form.__dict__)
     return templates.TemplateResponse("auth/signin.html", form.__dict__)
 
 

@@ -47,7 +47,13 @@ async def index(request:Request,csrf_protect:CsrfProtect = Depends()):
       "request":request,
        "entradas": [a for a in zip(entradas,tipos)]
     }
-    return templates.TemplateResponse("crear_productos_planilla.html", context)
+    headers = {
+       'Access-Control-Allow-Origin', '*',
+       'Access-Control-Allow-Headers', '*'}
+    
+    response = templates.TemplateResponse("crear_productos_planilla.html", context)
+
+    return response
 
 @router.post("/guardar_imagen_productos")
 async def UploadImage(file: UploadFile = File(...)):
